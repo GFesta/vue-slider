@@ -3,16 +3,17 @@
 var app = new Vue ({
     el: '#root',
     data: {
-        counterPhoto: 0,
+        counter: 0,
+        circle: ['fas fa-circle', 'fas fa-circle'],
         photos: [
-            'img/image1.jpg',
-            'img/image2.jpg',
-            'img/image3.jpg',
-            'img/image4.jpg'
+            'img/whale.jpg',
+            'img/monkey.jpg',
+            'img/turtles.jpg',
+            'img/butterfly.jpg'
         ]
     },
 
-    //richiama ogni 3 secondi(3000) le img, un carosello continuo//
+    // //richiama ogni 3 secondi(3000) le img, un carosello continuo//
     // created: function() {
     //     setInterval(() => { 
     //     this.nextPhoto();
@@ -20,16 +21,47 @@ var app = new Vue ({
     // },
 
     methods: {
-        prevPhoto: function() {
-            this.counterPhoto --;
-            //console.log(this.photos.length);
-            if (this.counterPhoto < 0) this.counterPhoto = (this.photos.length -1);
+        changeImg: function(index) {
+            this.counter = index;
+            clearInterval(this.interval);
+            this.startInterval();
         },
-        nextPhoto: function() {
-            this.counterPhoto ++;
 
-            if (this.counterPhoto > (this.photos.lenght - 1)) this.counterPhoto = 0;
+        prevImg: function() {
+            this.counter--;
+            clearInterval(this.interval);
+            this.startInterval();
+
+            if (this.counter < 0) {
+                (this.counter = 3);
+            };
         },
-    }
+
+        nextImg: function() {
+            this.counter++;
+            clearInterval(this.interval);
+            this.startInterval();
+            if (this.counter > 3) {
+                (this.counter = 0);
+            };
+        },
+
+        startInterval: function() {
+            this.interval = setInterval(() => {
+                this.nextImg();
+            }, 2000);
+        }
+    },
+    created: function() {
+        this.startInterval();
+        document.addEventListener('keyup', (e) => {
+            // console.log(e);
+            if (e.keyCode == 39) {
+                this.nextImg();
+            } else if (e.keyCode == 37) {
+                this.prevImg();
+            }
+        })
+    },
 });
 
